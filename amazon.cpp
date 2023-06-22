@@ -162,7 +162,40 @@ void OnlineShoppingSystem::addProduct(Product* product){
     numProducts++;
 }
 
+void OnlineShoppingSystem::removeProduct(Product *product){
+    if(!product) 
+        return;
+    int count = numProducts;
+    while(count > 0){
+        if(strcmp(product->getName(),products[count]->getName())==0){
+            products[count]->setName("");
+            products[count]->setPrice(0.0);
+//TODO didn't find an optimal way to remove from a static allocation of an array so I've initialized the element that we remove 
+//and subtracted the number of products, maybe need to initialize category because it is currently uninitialized. 
+            numProducts--;
+            return;
+        }
+        count--;
+    }
 
+
+}
+
+void OnlineShoppingSystem::addUser(User *user){
+    if(!user)
+        return;
+    int count = numUsers;
+
+    //checking if user already exist.
+    while(count > 0){
+        if(strcmp(users[count]->getName(),user->getName())==0){
+            return;
+        }
+        count--;
+    }
+
+    users[numUsers]->setName(user->getName());
+}
 
 
 
