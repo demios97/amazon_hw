@@ -118,6 +118,18 @@ void ShoppingCart::displayCart() const{
 }
 
 User::User(const char *name){
+    setName(name);
+}
+
+User::~User(){
+    delete[] name;
+}
+
+const char* User::getName()const{
+    return name;
+}
+
+void User::setName(const char *name){
     if(!name) return;
     this->name = new char[strlen(name)+1];
     if(!this->name){
@@ -125,8 +137,33 @@ User::User(const char *name){
         return;
     }
     strcpy(this->name, name);
-    
 }
+
+ShoppingCart& User::getShoppingCart(){
+    return cart;
+}
+
+OnlineShoppingSystem::OnlineShoppingSystem(){
+    this->numProducts = 0;
+    this->numUsers = 0;
+}
+
+OnlineShoppingSystem::~OnlineShoppingSystem(){
+    delete[] products;//TODO do we need? because he already deletes product in main
+}
+
+void OnlineShoppingSystem::addProduct(Product* product){
+    if(!product || numProducts==MAX_PRODUCTS) return;
+    products[numProducts]->setName(product->getName());
+    products[numProducts]->setPrice(product->getPrice());
+    products[numProducts]->setCategory(product->getCategory());
+    ShoppingCart cart = users[numUsers]->getShoppingCart();
+    cart.addProduct(product);
+    numProducts++;
+}
+
+
+
 
 
 int main() {
