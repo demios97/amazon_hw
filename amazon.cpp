@@ -19,6 +19,7 @@ std::string enumToString(Category cat) {
 }
 
 Product::Product(const char *name, double price, Category category){
+    if(!name || price<0 || category>Category::BEAUTY || category<Category::ELECTRONICS) return;
     setName(name);
     setPrice(price);
     setCategory(category);
@@ -70,7 +71,7 @@ ShoppingCart::~ShoppingCart(){
 }
 
 void ShoppingCart::addProduct(Product *product){
-    if(!product || numProducts==MAX_PRODUCTS){
+    if(!product || numProducts==MAX_PRODUCTS || !product->getName()){
         std::cout << "Product cannot be added to cart" << std::endl;
         return;
     }
@@ -79,7 +80,7 @@ void ShoppingCart::addProduct(Product *product){
 }
 
 void ShoppingCart::removeProduct(Product *product){
-    if(!product || numProducts==0){
+    if(!product || numProducts==0 || !product->getName()){
         std::cout << "Product cannot be removed from cart" << std::endl;
         return;
     }
@@ -131,6 +132,7 @@ void User::setName(const char *name){
     if(!name){
         return;
     }
+    delete[] this->name;
     this->name = new char[strlen(name)+1];
     if(!this->name){
         delete[] this->name;
@@ -154,7 +156,7 @@ OnlineShoppingSystem::~OnlineShoppingSystem(){
 }
 
 void OnlineShoppingSystem::addProduct(Product* product){
-    if(!product || numProducts==MAX_PRODUCTS) {
+    if(!product || numProducts==MAX_PRODUCTS || !product->getName()) {
         std::cout << "Product cannot be added" << std::endl;
         return;
     }
@@ -168,7 +170,7 @@ void OnlineShoppingSystem::addProduct(Product* product){
 }
 
 void OnlineShoppingSystem::removeProduct(Product *product){
-    if(!product || numProducts==0){
+    if(!product || numProducts==0 || !product->getName()){
         std::cout << "Product cannot be removed" << std::endl;
         return;
     }
@@ -188,7 +190,7 @@ void OnlineShoppingSystem::removeProduct(Product *product){
 }
 
 void OnlineShoppingSystem::addUser(User *user){
-    if(!user || numUsers==MAX_USERS){
+    if(!user || numUsers==MAX_USERS || !user->getName()){
         std::cout << "User cannot be added" << std::endl;
         return;
     }
@@ -203,7 +205,7 @@ void OnlineShoppingSystem::addUser(User *user){
 }
 
 void OnlineShoppingSystem::removeUser(User *user){
-    if(!user || numUsers==0){
+    if(!user || numUsers==0 || !user->getName()){
         std::cout << "User cannot be removed" << std::endl;
         return;
     }
@@ -246,10 +248,12 @@ OnlineShoppingSystem shoppingSystem;
 Product* product1 = new Product("Laptop", 1000.0, Category::ELECTRONICS);
 Product* product2 = new Product("T-Shirt", 19.99, Category::CLOTHING);
 Product* product3 = new Product("Book", 29.99, Category::BOOKS);
+Product* product4 = new Product("Book2", -29.99, Category::BOOKS);
 // Add the products to the system
 shoppingSystem.addProduct(product1);
 shoppingSystem.addProduct(product2);
 shoppingSystem.addProduct(product3);
+shoppingSystem.addProduct(product4);
 // Create a user
 User* user1 = new User("John1");
 User* user2 = new User("John2");
@@ -266,10 +270,10 @@ user1->getShoppingCart().addProduct(product2);
 user1->getShoppingCart().addProduct(product3);
 user2->getShoppingCart().addProduct(product3);
 user2->getShoppingCart().addProduct(product3);
-user2->getShoppingCart().addProduct(product3);
+user2->getShoppingCart().addProduct(product4);
 user1->getShoppingCart().displayCart();
 user2->getShoppingCart().displayCart();
-shoppingSystem.removeProduct(product3);
+shoppingSystem.removeProduct(product4);
 shoppingSystem.removeUser(user1);
 user2->getShoppingCart().displayCart();
 // Display the products and users in the system
@@ -279,6 +283,7 @@ shoppingSystem.displayUsers();
 delete product1;
 delete product2;
 delete product3;
+delete product4;
 delete user1;
 delete user2;
 delete user3;

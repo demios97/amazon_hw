@@ -10,7 +10,7 @@ enum class Category{
 
 class Product{
 private:
-    char *name;
+    char *name = nullptr;
     double price;
     Category category;
 public:
@@ -40,7 +40,7 @@ public:
 
 class User{
 private:
-    char *name;
+    char *name = nullptr;
     ShoppingCart cart;
 public:
     User(const char *name);
